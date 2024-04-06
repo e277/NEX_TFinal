@@ -1,15 +1,10 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Login extends JFrame {
+public class LoginForm extends JFrame {
     //initialize button, panel, label, and text field  
     JButton submitButton;
     JPanel loginPanel;
@@ -18,7 +13,7 @@ public class Login extends JFrame {
     private ArrayList<String> users = new ArrayList<>();
 
     //calling constructor  
-    Login() {
+    LoginForm() {
         //create label for username   
         userLabel = new JLabel();
         userLabel.setText("Username");      //set label value for textField1  
@@ -60,8 +55,6 @@ public class Login extends JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
-        //users = loadUsers("C:\\Users\\janth\\Downloads\\NEX_T-main\\src\\logininfo.txt");
-
         setLoginButtonActionListener(new ActionListener()     //pass action listener as a parameter  
         {
             @Override
@@ -69,18 +62,12 @@ public class Login extends JFrame {
             {
                 String username = userField.getText();        //get user entered username from the textField1  
                 String password = passwordField.getText();        //get user entered pasword from the textField2  
-                //check whether the credentials are authentic or not  
-                //boolean err=true;
-                /*for(String user:users){
-                    String[] arruser = user.split(";");
-                    String loguname = arruser[0];
-                    String logpword = arruser[1];
-                    */
+                //check whether the credentials are authentic or not
                 if (username.equals("admin") && password.equals("admin")) {
                     System.out.println("Welcome " + username);
                     JOptionPane.showMessageDialog(null, "Welcome " + username);
                     dispose();
-                    EntryListing entryListing = new EntryListing();
+                    StudentListing entryListing = new StudentListing();
                     entryListing.setVisible(true);
                 } else {
                     System.out.println("Incorrect. Please enter a valid username and password");
