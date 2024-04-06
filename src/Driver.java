@@ -1,11 +1,11 @@
-public class Student {
+public class Driver {
     private String id;
     private String name;
     private String licensePlate;
     private String timeIn;
     private String timeOut;
 
-    public Student(String id, String name, String licensePlate, String timeIn, String timeOut) {
+    public Driver(String id, String name, String licensePlate, String timeIn, String timeOut) {
         this.id = id;
         this.name = name;
         this.licensePlate = licensePlate;

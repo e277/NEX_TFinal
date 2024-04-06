@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class StudentDeleter extends JFrame {
+public class DriverDeleter extends JFrame {
     private JComboBox<String> entryComboBox;
-    private StudentListing entryListing;
+    private DriverListing entryListing;
 
-    public StudentDeleter(StudentListing entryListing, ArrayList<Student> entries) {
+    public DriverDeleter(DriverListing entryListing, ArrayList<Driver> entries) {
         super("Entry Deleter");
         this.entryListing = entryListing;
 
@@ -23,10 +23,10 @@ public class StudentDeleter extends JFrame {
         setLayout(new GridLayout(2, 2));
     }
 
-    private void setupComponents(ArrayList<Student> entries) {
+    private void setupComponents(ArrayList<Driver> entries) {
         JLabel selectLabel = new JLabel("Select an entry to delete: ");
         entryComboBox = new JComboBox<>();
-        for (Student entry : entries) {
+        for (Driver entry : entries) {
             entryComboBox.addItem(entry.getName());
         }
         JButton deleteButton = new JButton("Delete");

@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class StudentEntry extends JFrame {
+public class DriverEntry extends JFrame {
     private JTextField nameField, licensePlateField, idField, timeInField, timeOutField;
-    private StudentListing entryListing;
+    private DriverListing entryListing;
 
-    public StudentEntry(StudentListing entryListing) {
+    public DriverEntry(DriverListing entryListing) {
         super("Student Data Entry");
         this.entryListing = entryListing;
 
@@ -44,7 +44,7 @@ public class StudentEntry extends JFrame {
             String id = idField.getText();
             String timeIn = timeInField.getText();
             String timeOut = timeOutField.getText();
-            Student entry = new Student(name, licensePlate, id, timeIn, timeOut);
+            Driver entry = new Driver(name, licensePlate, id, timeIn, timeOut);
             entryListing.addEntry(entry);
             dispose();
         } catch (Exception ex) {

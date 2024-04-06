@@ -3,13 +3,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class StudentSearch extends JFrame {
+public class DriverSearch extends JFrame {
     private JLabel nameField, licensePlateField, idField, timeInField, timeOutField;
     private JTextField idSearch;
-    private ArrayList<Student> entries;
-    private StudentListing entryListing;
+    private ArrayList<Driver> entries;
+    private DriverListing entryListing;
 
-    public StudentSearch(StudentListing entryListing, ArrayList<Student> entries) {
+    public DriverSearch(DriverListing entryListing, ArrayList<Driver> entries) {
         super("Search");
         this.entryListing = entryListing;
         this.entries = entries;
@@ -75,7 +75,7 @@ public class StudentSearch extends JFrame {
 
     private void searchStudent() {
         String person = idSearch.getText();
-        for(Student entry:entries){
+        for(Driver entry:entries){
             if (Objects.equals(entry.getId(), person)){
                 idField.setText(entry.getId());
                 nameField.setText(entry.getName());

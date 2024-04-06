@@ -2,12 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class StudentEditor extends JFrame {
+public class DriverEditor extends JFrame {
     private JTextField idField, nameField, licensePlateField, timeInField, timeOutField;
     private JComboBox<String> entryComboBox;
-    private StudentListing entryListing;
+    private DriverListing entryListing;
 
-    public StudentEditor(StudentListing entryListing, ArrayList<Student> entries) {
+    public DriverEditor(DriverListing entryListing, ArrayList<Driver> entries) {
         super("Entry Editor");
         this.entryListing = entryListing;
 
@@ -25,9 +25,9 @@ public class StudentEditor extends JFrame {
         setVisible(true);
     }
 
-    private void setupComponents(ArrayList<Student> entries) {
+    private void setupComponents(ArrayList<Driver> entries) {
         entryComboBox = new JComboBox<>();
-        for (Student entry : entries) {
+        for (Driver entry : entries) {
             entryComboBox.addItem(entry.getName());
         }
 
@@ -57,15 +57,15 @@ public class StudentEditor extends JFrame {
         add(new JButton("Save"));
     }
 
-    private void setupListeners(ArrayList<Student> entries) {
+    private void setupListeners(ArrayList<Driver> entries) {
         entryComboBox.addActionListener(e -> updateFieldsBasedOnSelectedEntry(entries));
         JButton saveButton = (JButton) getContentPane().getComponent(13);
         saveButton.addActionListener(e -> saveEntry());
     }
 
-    private void updateFieldsBasedOnSelectedEntry(ArrayList<Student> entries) {
+    private void updateFieldsBasedOnSelectedEntry(ArrayList<Driver> entries) {
         int selectedIndex = entryComboBox.getSelectedIndex();
-        Student newSelectedEntry = entries.get(selectedIndex);
+        Driver newSelectedEntry = entries.get(selectedIndex);
         idField.setText(newSelectedEntry.getId());
         nameField.setText(newSelectedEntry.getName());
         licensePlateField.setText(newSelectedEntry.getLicensePlate());
@@ -81,7 +81,7 @@ public class StudentEditor extends JFrame {
         String timeIn = timeInField.getText();
         String timeOut = timeOutField.getText();
 
-        Student updatedEntry = new Student(id, name, licensePlate, timeIn, timeOut);
+        Driver updatedEntry = new Driver(id, name, licensePlate, timeIn, timeOut);
         entryListing.updateEntry(selectedIndex, updatedEntry);
 
         dispose();
