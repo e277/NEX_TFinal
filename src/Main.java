@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main extends JFrame {
-    private static ArrayList<Student> entries = new ArrayList<>();
+    private static ArrayList<Driver> entries = new ArrayList<>();
     private JButton enterButton;
 
     private JButton addSecurityGuardButton = new JButton("Add Security Guard");
@@ -42,7 +42,7 @@ public class Main extends JFrame {
         // Create and show entry screen
         Main entryScreen = new Main();
         try {
-            Image backgroundImage = ImageIO.read(new File("NEX_TFinal\\src\\nextlogopic.jpg"));
+            Image backgroundImage = ImageIO.read(new File("src/nextlogopic.jpg"));
             entryScreen.setBackgroundImage(backgroundImage);
         } catch (IOException e) {
             System.err.println("Error loading background image: " + e.getMessage());

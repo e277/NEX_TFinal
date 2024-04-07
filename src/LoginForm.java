@@ -5,11 +5,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class LoginForm extends JFrame {
-    //initialize button, panel, label, and text field  
-    JButton submitButton;
-    JPanel loginPanel;
-    JLabel userLabel, passwordLabel;
-    final JTextField userField, passwordField;
+    //initialize button, panel, label, and text field
+    private JButton submitButton;
+    private JPanel loginPanel;
+    private JLabel userLabel, passwordLabel;
+    private final JTextField userField, passwordField;
     private ArrayList<String> users = new ArrayList<>();
 
     //calling constructor  
@@ -67,7 +67,7 @@ public class LoginForm extends JFrame {
                     System.out.println("Welcome " + username);
                     JOptionPane.showMessageDialog(null, "Welcome " + username);
                     dispose();
-                    StudentListing entryListing = new StudentListing();
+                    DriverListing entryListing = new DriverListing();
                     entryListing.setVisible(true);
                 } else {
                     System.out.println("Incorrect. Please enter a valid username and password");
