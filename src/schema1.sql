@@ -10,4 +10,13 @@ CREATE TABLE `drivers` (
     licensePlate VARCHAR(255),
     timeIn VARCHAR(255),
     timeOut VARCHAR(255)
-)
+);
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+    id VARCHAR(255) PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255)
+);
+
+INSERT INTO `users` (id, username, password) VALUES ('1', 'admin', 'admin');

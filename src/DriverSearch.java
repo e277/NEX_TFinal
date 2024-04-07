@@ -1,18 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DriverSearch extends JFrame {
     private JLabel nameField, licensePlateField, idField, timeInField, timeOutField;
     private JTextField idSearch;
-    private ArrayList<Driver> entries;
     private DriverListing entryListing;
 
-    public DriverSearch(DriverListing entryListing, ArrayList<Driver> entries) {
-        super("Search");
+    public DriverSearch(DriverListing entryListing) {
+        super("Search For Driver");
         this.entryListing = entryListing;
-        this.entries = entries;
 
         setupFrame();
         setupComponents();
@@ -20,7 +20,6 @@ public class DriverSearch extends JFrame {
     }
 
     private void setupFrame() {
-        setTitle("Search");
         setSize(300, 200);
         setLocationRelativeTo(null);
         setResizable(true);
@@ -37,7 +36,7 @@ public class DriverSearch extends JFrame {
         timeOutField = new JLabel();
         idSearch = new JTextField();
 
-        addLabelAndTextField("search for ID:", idSearch);
+        addLabelAndTextField(idSearch);
         addLabelAndField("Name: ", nameField);
         addLabelAndField("License Plate: ", licensePlateField);
         addLabelAndField("ID: ", idField);
@@ -47,8 +46,8 @@ public class DriverSearch extends JFrame {
         addButtons();
     }
 
-    private void addLabelAndTextField(String labelText, JTextField textField) {
-        add(new JLabel(labelText));
+    private void addLabelAndTextField(JTextField textField) {
+        add(new JLabel("Search for ID:"));
         add(textField);
     }
 
@@ -58,31 +57,38 @@ public class DriverSearch extends JFrame {
     }
 
     private void addButtons() {
-        JButton okButton = new JButton("OK");
+        JButton searchButton = new JButton("Search");
         JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> dispose());
 
-        add(okButton);
+        add(searchButton);
         add(closeButton);
     }
 
     private void setupListeners() {
-        JButton closeButton = (JButton) getContentPane().getComponent(12);
-        closeButton.addActionListener(e -> dispose());
-
-        JButton okButton = (JButton) getContentPane().getComponent(11);
-        okButton.addActionListener(e -> searchStudent());
+        JButton searchButton = (JButton) getContentPane().getComponent(12); // Adjusted index
+        searchButton.addActionListener(e -> searchStudent());
     }
 
     private void searchStudent() {
-        String person = idSearch.getText();
-        for(Driver entry:entries){
-            if (Objects.equals(entry.getId(), person)){
-                idField.setText(entry.getId());
-                nameField.setText(entry.getName());
-                licensePlateField.setText(entry.getLicensePlate());
-                timeInField.setText(entry.getTimeIn());
-                timeOutField.setText(entry.getTimeOut());
+        String id = idSearch.getText();
+        String selectSql = "SELECT * FROM Drivers WHERE id = ?";
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(selectSql)) {
+
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                idField.setText(resultSet.getString("id"));
+                nameField.setText(resultSet.getString("name"));
+                licensePlateField.setText(resultSet.getString("licensePlate"));
+                timeInField.setText(resultSet.getString("timeIn"));
+                timeOutField.setText(resultSet.getString("timeOut"));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

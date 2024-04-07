@@ -1,17 +1,28 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class DriverEntry extends JFrame {
     private JTextField nameField, licensePlateField, idField, timeInField, timeOutField;
     private DriverListing entryListing;
 
     public DriverEntry(DriverListing entryListing) {
-        super("Student Data Entry");
+        super("Enter Driver Information");
         this.entryListing = entryListing;
 
+        setupFrame();
         setupTextFields();
         setupSaveButton();
-        setupFrame();
+    }
+
+    private void setupFrame() {
+        setSize(400, 200);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     private void setupTextFields() {
@@ -39,24 +50,34 @@ public class DriverEntry extends JFrame {
 
     private void saveEntry() {
         try {
+            String id = idField.getText();
             String name = nameField.getText();
             String licensePlate = licensePlateField.getText();
-            String id = idField.getText();
             String timeIn = timeInField.getText();
             String timeOut = timeOutField.getText();
-            Driver entry = new Driver(name, licensePlate, id, timeIn, timeOut);
-            entryListing.addEntry(entry);
+            Driver entry = new Driver(id, name, licensePlate, timeIn, timeOut);
+
+            String insertSql = "INSERT INTO Drivers (id, name, licensePlate, timeIn, timeOut) VALUES (?, ?, ?, ?, ?)";
+
+            try (Connection connection = DatabaseConfig .getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
+
+                preparedStatement.setString(1, entry.getId());
+                preparedStatement.setString(2, entry.getName());
+                preparedStatement.setString(3, entry.getLicensePlate());
+                preparedStatement.setString(4, entry.getTimeIn());
+                preparedStatement.setString(5, entry.getTimeOut());
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            entryListing.loadEntries();
             dispose();
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Please fill in the data entry");
         }
-    }
-
-    private void setupFrame() {
-        setSize(400, 200);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setResizable(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 }
