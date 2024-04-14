@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DriverEntry extends JFrame {
     private JTextField nameField, licensePlateField, idField, timeInField, timeOutField;
@@ -55,29 +53,64 @@ public class DriverEntry extends JFrame {
             String licensePlate = licensePlateField.getText();
             String timeIn = timeInField.getText();
             String timeOut = timeOutField.getText();
+
+            if (id.isEmpty() || name.isEmpty() || licensePlate.isEmpty() || timeIn.isEmpty() || timeOut.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+                return;
+            }
+
             Driver entry = new Driver(id, name, licensePlate, timeIn, timeOut);
 
-            String insertSql = "INSERT INTO Drivers (id, name, licensePlate, timeIn, timeOut) VALUES (?, ?, ?, ?, ?)";
+            String findSlotQuery = "SELECT COUNT(*) as totalSlots, SUM(isOccupied) as occupiedSlots FROM parking_lot";
+            try (Connection connection = DatabaseConfig.getConnection();
+                 PreparedStatement findSlotStatement = connection.prepareStatement(findSlotQuery);
+                 ResultSet resultSet = findSlotStatement.executeQuery()) {
 
-            try (Connection connection = DatabaseConfig .getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
+                if (resultSet.next()) {
+                    int totalSlots = resultSet.getInt("totalSlots");
+                    int occupiedSlots = resultSet.getInt("occupiedSlots");
 
-                preparedStatement.setString(1, entry.getId());
-                preparedStatement.setString(2, entry.getName());
-                preparedStatement.setString(3, entry.getLicensePlate());
-                preparedStatement.setString(4, entry.getTimeIn());
-                preparedStatement.setString(5, entry.getTimeOut());
+                    if (occupiedSlots < totalSlots) {
+                        String insertSql = "INSERT INTO Drivers (id, name, licensePlate, timeIn, timeOut) VALUES (?, ?, ?, ?, ?)";
+                        try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
+                            preparedStatement.setString(1, entry.getId());
+                            preparedStatement.setString(2, entry.getName());
+                            preparedStatement.setString(3, entry.getLicensePlate());
+                            preparedStatement.setString(4, entry.getTimeIn());
+                            preparedStatement.setString(5, entry.getTimeOut());
 
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                            preparedStatement.executeUpdate();
+                        }
+
+                        int nextSlot = -1;
+                        String findNextSlotQuery = "SELECT MIN(slotNumber) as nextSlot FROM parking_lot WHERE isOccupied = false";
+                        try (PreparedStatement findNextSlotStatement = connection.prepareStatement(findNextSlotQuery);
+                             ResultSet resultSet2 = findNextSlotStatement.executeQuery()) {
+                            if (resultSet2.next()) {
+                                nextSlot = resultSet2.getInt("nextSlot");
+                            }
+                        }
+
+                        if (nextSlot != -1) {
+                            String assignDriverQuery = "UPDATE parking_lot SET isOccupied = true, driverId = ? WHERE slotNumber = ?";
+                            try (PreparedStatement assignDriverStatement = connection.prepareStatement(assignDriverQuery)) {
+                                assignDriverStatement.setString(1, entry.getId());
+                                assignDriverStatement.setInt(2, nextSlot);
+                                assignDriverStatement.executeUpdate();
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "The parking lot is full. The driver entry was not saved.");
+                        return;
+                    }
+                }
             }
 
             entryListing.loadEntries();
             dispose();
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Please fill in the data entry");
+            JOptionPane.showMessageDialog(null, "An error occurred: " + ex.getMessage());
         }
     }
 }

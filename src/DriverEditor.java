@@ -71,7 +71,7 @@ public class DriverEditor extends JFrame {
         add(new JLabel("Time Out: "));
         add(timeOutField);
         add(new JLabel(""));
-        add(new JButton("Save"));
+        add(new JButton("Update"));
     }
 
     private void setupListeners() {

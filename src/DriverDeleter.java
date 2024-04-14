@@ -57,23 +57,33 @@ public class DriverDeleter extends JFrame {
 
     private void deleteEntry() {
         String selectedName = (String) entryComboBox.getSelectedItem();
-        deleteDriverFromDatabase(selectedName);
-        dispose();
-    }
 
-    private void deleteDriverFromDatabase(String name) {
+        String idForNameSql = "SELECT id FROM Drivers WHERE name = ?";
+        String updateParkingLotSql = "UPDATE parking_lot SET isOccupied = false, driverId = null WHERE driverId = ?";
         String deleteSql = "DELETE FROM Drivers WHERE name = ?";
 
         try (Connection connection = DatabaseConfig.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(deleteSql)) {
+            PreparedStatement idForNameStatement = connection.prepareStatement(idForNameSql);
+            PreparedStatement updateParkingLotStatement = connection.prepareStatement(updateParkingLotSql);
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
 
-            preparedStatement.setString(1, name);
-            preparedStatement.executeUpdate();
+            idForNameStatement.setString(1, selectedName);
+            ResultSet resultSet = idForNameStatement.executeQuery();
+            resultSet.next();
+            String id = resultSet.getString("id");
+
+            updateParkingLotStatement.setString(1, id);
+            updateParkingLotStatement.executeUpdate();
+
+            deleteStatement.setString(1, selectedName);
+            deleteStatement.executeUpdate();
 
             entryListing.loadEntries();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        dispose();
     }
 }
