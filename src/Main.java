@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class Main extends JFrame {
     private JButton enterButton;
+    private JButton checkAvailabilityButton;
+    private JButton generateReportButton;
 
     public Main() {
         super("Nex_T Parking Management System");
@@ -16,6 +18,8 @@ public class Main extends JFrame {
         setupButtons();
         loadBackgroundImage();
         setupEnterButtonActionListener();
+        setupCheckAvailabilityButtonActionListener();
+        setupGenerateReportButtonActionListener();
     }
 
     private void setupFrame() {
@@ -33,11 +37,22 @@ public class Main extends JFrame {
 
     private void setupButtons() {
         JPanel buttonPanel = new JPanel();
+
         enterButton = new JButton("Enter");
         enterButton.setFont(new Font("SansSerif", Font.BOLD, 16));
-        enterButton.setPreferredSize(new Dimension(100, 40));
+        enterButton.setPreferredSize(new Dimension(150, 40));
+
+        checkAvailabilityButton = new JButton("Check Availability");
+        checkAvailabilityButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        checkAvailabilityButton.setPreferredSize(new Dimension(200, 40));
+
+        generateReportButton = new JButton("Generate Report");
+        generateReportButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        generateReportButton.setPreferredSize(new Dimension(200, 40));
 
         buttonPanel.add(enterButton);
+        buttonPanel.add(checkAvailabilityButton);
+        buttonPanel.add(generateReportButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     }
 
@@ -72,6 +87,27 @@ public class Main extends JFrame {
                 dispose();
                 LoginForm login = new LoginForm();
                 login.setVisible(true);
+            }
+        });
+    }
+
+    private void setupCheckAvailabilityButtonActionListener() {
+        checkAvailabilityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParkingLot checkAvailability = new ParkingLot();
+                checkAvailability.setVisible(true);
+            }
+        });
+    }
+
+    private void setupGenerateReportButtonActionListener() {
+        generateReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                DataLogReport generateReport = new DataLogReport();
+                generateReport.setVisible(true);
             }
         });
     }
