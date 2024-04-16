@@ -1,9 +1,10 @@
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DataLogReport {
+public class DataLogReport extends JFrame {
     private int totalPatrons;
     private int newPatrons;
     private int modifiedRecords;
@@ -34,6 +35,4 @@ public class DataLogReport {
         // Save and close the report
     }
 
-    public void setVisible(boolean b) {
-    }
 }
