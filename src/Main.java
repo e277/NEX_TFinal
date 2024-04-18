@@ -38,7 +38,7 @@ public class Main extends JFrame {
     private void setupButtons() {
         JPanel buttonPanel = new JPanel();
 
-        enterButton = new JButton("Enter");
+        enterButton = new JButton("Login");
         enterButton.setFont(new Font("SansSerif", Font.BOLD, 16));
         enterButton.setPreferredSize(new Dimension(150, 40));
 
@@ -84,7 +84,7 @@ public class Main extends JFrame {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
+//                dispose();
                 LoginForm login = new LoginForm();
                 login.setVisible(true);
             }
@@ -105,9 +105,8 @@ public class Main extends JFrame {
         generateReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
-                DataLogReport generateReport = new DataLogReport();
-                generateReport.setVisible(true);
+                DataLogReport dataLogReport = new DataLogReport();
+                dataLogReport.setVisible(true);
             }
         });
     }
